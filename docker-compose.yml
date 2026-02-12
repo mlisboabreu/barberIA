@@ -1,0 +1,30 @@
+
+
+services:
+  db:
+    image: postgres:15
+    container_name: barberIA_db
+    restart: always
+    environment:
+      POSTGRES_USER: marciolisboa
+      POSTGRES_PASSWORD: penelope11
+      POSTGRES_DB: barber_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build: .
+    container_name: barberIA_app
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+volumes:
+  postgres_data:
